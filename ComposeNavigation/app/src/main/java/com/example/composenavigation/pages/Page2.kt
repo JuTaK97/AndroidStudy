@@ -1,19 +1,9 @@
 package com.example.composenavigation.pages
 
-import android.widget.Space
-import android.widget.Toast
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.selection.toggleable
-import androidx.compose.material.Button
-import androidx.compose.material.Checkbox
-import androidx.compose.material.Divider
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -23,16 +13,22 @@ import androidx.navigation.compose.rememberNavController
 import com.example.composenavigation.GroupCheckBox
 import com.example.composenavigation.ShowStack
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun Page2(navController: NavController) {
     val destinationList = listOf("page1", "page2", "page3", "page4", "main")
     val optionList = listOf("singleTop", "restoreState", "popUpTo")
+    val popUpToOptionList = listOf("inclusive", "saveState")
 
-    val destinationCheckBoxStates = remember { mutableStateListOf(false, false, false, false, false) }
-    val optionCheckBoxStates = remember { mutableStateListOf(false, false, false) }
+    val destinationCheckBoxStates =
+        remember { mutableStateListOf(false, false, false, false, false) }
+    val optionCheckBoxStates =
+        remember { mutableStateListOf(false, false, false) }
+    val popUpToOptionBoxStates =
+        remember { mutableStateListOf(false, false) }
 
     Column(modifier = Modifier.padding(horizontal = 5.dp)) {
-        Text(text = "Here is PAGE 2", fontWeight = FontWeight.Bold, fontSize = 25.sp)
+        Text(text = "Here is PAGE 1", fontWeight = FontWeight.Bold, fontSize = 25.sp)
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(text = "Choose Destination", fontSize = 18.sp, fontWeight = FontWeight.Normal)
@@ -51,18 +47,85 @@ fun Page2(navController: NavController) {
             states = optionCheckBoxStates
         )
 
+        var chosenPopupTo by remember { mutableStateOf("") }
+        if (optionCheckBoxStates[2]) {
+            var dropDownExpanded by remember { mutableStateOf(false) }
+
+            Column(Modifier.padding(start = 15.dp)) {
+                ExposedDropdownMenuBox(
+                    expanded = dropDownExpanded,
+                    onExpandedChange = { dropDownExpanded = dropDownExpanded.not() }
+                ) {
+                    TextField(
+                        readOnly = true,
+                        value = "popUpTo: $chosenPopupTo",
+                        onValueChange = {},
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = dropDownExpanded)
+                        },
+                        colors = ExposedDropdownMenuDefaults.textFieldColors()
+                    )
+                    ExposedDropdownMenu(
+                        expanded = dropDownExpanded,
+                        onDismissRequest = {
+                            dropDownExpanded = false
+                        }
+                    ) {
+                        navController.backQueue
+                            .filter {
+                                it.destination.route != null
+                            }
+                            .map {
+                                it.destination.route!!
+                            }
+                            .distinct()
+                            .forEach {
+                                DropdownMenuItem(
+                                    onClick = {
+                                        chosenPopupTo = it
+                                        dropDownExpanded = false
+                                    }
+                                ) {
+                                    Text(it)
+                                }
+                            }
+                    }
+                }
+                GroupCheckBox(
+                    list = popUpToOptionList,
+                    states = popUpToOptionBoxStates
+                )
+            }
+        }
+        else {
+            chosenPopupTo = ""
+        }
+
+        Spacer(modifier = Modifier.height(15.dp))
         Button(
             onClick = {
                 destinationCheckBoxStates.forEachIndexed { index, state ->
-                    if(state) navController.navigate(destinationList[index]) {
+                    if (state) navController.navigate(destinationList[index]) {
                         launchSingleTop = optionCheckBoxStates[0]
                         restoreState = optionCheckBoxStates[1]
+                        if (chosenPopupTo.isEmpty().not()) {
+                            popUpTo(chosenPopupTo) {
+                                inclusive = popUpToOptionBoxStates[0]
+                                saveState = popUpToOptionBoxStates[1]
+                            }
+                        }
                     }
                 }
             }
         ) {
-            Text("Navigate!", fontSize = 30.sp)
+            Text("Navigate!", fontSize = 25.sp)
         }
         ShowStack(navController)
     }
+}
+
+@Preview(showBackground = true, widthDp = 480)
+@Composable
+fun Page2Preview() {
+    Page2(rememberNavController())
 }

@@ -75,15 +75,18 @@ fun Page1(navController: NavController) {
                             .filter {
                                 it.destination.route != null
                             }
+                            .map {
+                                it.destination.route!!
+                            }
                             .distinct()
                             .forEach {
                                 DropdownMenuItem(
                                     onClick = {
-                                        chosenPopupTo = it.destination.route!!
+                                        chosenPopupTo = it
                                         dropDownExpanded = false
                                     }
                                 ) {
-                                    Text(it.destination.route!!)
+                                    Text(it)
                                 }
                             }
                     }
