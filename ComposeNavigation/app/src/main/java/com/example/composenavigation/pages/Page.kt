@@ -15,7 +15,7 @@ import com.example.composenavigation.ShowStack
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun Page1(navController: NavController) {
+fun Page(navController: NavController, pageNum: Int) {
     val destinationList = listOf("page1", "page2", "page3", "page4", "main")
     val optionList = listOf("singleTop", "restoreState", "popUpTo")
     val popUpToOptionList = listOf("inclusive", "saveState")
@@ -27,8 +27,8 @@ fun Page1(navController: NavController) {
     val popUpToOptionBoxStates =
         remember { mutableStateListOf(false, false) }
 
-    Column(modifier = Modifier.padding(horizontal = 5.dp)) {
-        Text(text = "Here is PAGE 1", fontWeight = FontWeight.Bold, fontSize = 25.sp)
+    Column(modifier = Modifier.padding(horizontal = 15.dp)) {
+        Text(text = "Here is PAGE $pageNum", fontWeight = FontWeight.Bold, fontSize = 25.sp)
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(text = "Choose Destination", fontSize = 18.sp, fontWeight = FontWeight.Normal)
@@ -58,7 +58,7 @@ fun Page1(navController: NavController) {
                 ) {
                     TextField(
                         readOnly = true,
-                        value = "popUpTo: $chosenPopupTo",
+                        value = "popUpToRoute: $chosenPopupTo",
                         onValueChange = {},
                         trailingIcon = {
                             ExposedDropdownMenuDefaults.TrailingIcon(expanded = dropDownExpanded)
@@ -126,6 +126,6 @@ fun Page1(navController: NavController) {
 
 @Preview(showBackground = true, widthDp = 480)
 @Composable
-fun Page1Preview() {
-    Page1(rememberNavController())
+fun PagePreview() {
+    Page(rememberNavController(), 1)
 }
