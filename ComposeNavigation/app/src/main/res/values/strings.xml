@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ComposeNavigation</string>
+    <string name="profile">profile</string>
+    <string name="friend_list">friend list</string>
 </resources>
