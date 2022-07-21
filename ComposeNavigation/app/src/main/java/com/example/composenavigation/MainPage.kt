@@ -1,23 +1,14 @@
 package com.example.composenavigation
 
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Context.NOTIFICATION_SERVICE
-import android.content.Intent
-import android.content.ContextWrapper
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.app.NotificationCompat
-import androidx.core.app.TaskStackBuilder
-import androidx.core.net.toUri
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 

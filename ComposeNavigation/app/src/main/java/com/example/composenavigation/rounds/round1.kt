@@ -6,6 +6,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.composenavigation.ShowStack
 
 @Composable
 fun Round1(navController: NavController) {
@@ -14,6 +15,7 @@ fun Round1(navController: NavController) {
         Button(onClick = { navController.navigate("round2") }) {
             Text(text = "Go to Round 2", fontSize = 25.sp)
         }
-    }
 
+        ShowStack(navController)
+    }
 }

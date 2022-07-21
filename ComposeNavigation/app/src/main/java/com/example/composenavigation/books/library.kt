@@ -58,7 +58,7 @@ fun BookGrid(
                     .height(96.dp)
                     .clickable {
                         val bookName = books[index].bookName
-                        navController.navigate("book?bookName=${bookName}")
+                        navController.navigate("book?bookName=${bookName}&bookPage={1}")
                     },
                 elevation = 8.dp
             ) {
@@ -97,9 +97,10 @@ fun BookGrid(
 }
 
 @Composable
-fun Book(navController: NavController, bookName: String?) {
+fun Book(navController: NavController, bookName: String?, bookPage: Int?) {
     Column {
         Text(bookName ?: "null", fontSize = 30.sp, fontWeight = FontWeight.Bold)
+        Text( "${bookPage?: 1}", fontSize = 20.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(30.dp))
 
         var textField by remember {
@@ -112,7 +113,7 @@ fun Book(navController: NavController, bookName: String?) {
                 textField = it
             }
         )
-        Button(onClick = { navController.navigate("book?bookName=${textField}") }
+        Button(onClick = { navController.navigate("book?bookName=${textField}&bookPage={35}") }
         ) {
             Text("Navigate to book name : $textField")
         }
